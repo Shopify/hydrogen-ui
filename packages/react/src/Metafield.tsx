@@ -27,7 +27,7 @@ export type MetafieldProps<ComponentGeneric extends ElementType> =
 /**
  * The `Metafield` component renders the value of a Storefront
  * API's [Metafield object](https://shopify.dev/api/storefront/reference/common-objects/metafield).
- * Relies on the `locale` property of the `useShop()` hook, so it must be a desendent of `<ShopifyProvider/>`
+ * Relies on the `locale` property of the `useShop()` hook, so it must be a descendent of `<ShopifyProvider/>`
  *
  * Renders a smart default of the Metafield's `value`. For more information, refer to the [Default output](#default-output) section.
  */
