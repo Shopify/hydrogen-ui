@@ -34,16 +34,19 @@ export function addImageSizeParametersToUrl({
     let finalWidth: string;
 
     if (typeof width === 'string') {
-      finalWidth = (IMG_SRC_SET_SIZES[0] * multipliedScale).toString();
+      finalWidth = Math.ceil(IMG_SRC_SET_SIZES[0] * multipliedScale).toString();
     } else {
-      finalWidth = (Number(width) * multipliedScale).toString();
+      finalWidth = Math.ceil(Number(width) * multipliedScale).toString();
     }
 
     newUrl.searchParams.append('width', finalWidth);
   }
 
   if (height && typeof height === 'number') {
-    newUrl.searchParams.append('height', (height * multipliedScale).toString());
+    newUrl.searchParams.append(
+      'height',
+      Math.ceil(height * multipliedScale).toString()
+    );
   }
 
   crop && newUrl.searchParams.append('crop', crop);
