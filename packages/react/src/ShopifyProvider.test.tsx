@@ -108,7 +108,7 @@ describe('<ShopifyProvider/>', () => {
       expect(
         result.current.getPublicTokenHeaders({contentType: 'json'})
       ).toEqual({
-        'X-SDK-Variant': 'hydrogen-ui',
+        'X-SDK-Variant': 'storefront-kit',
         'X-SDK-Variant-Source': 'react',
         'X-SDK-Version': '2022-10',
         'X-Shopify-Storefront-Access-Token': 'abc123',
@@ -136,7 +136,7 @@ describe('<ShopifyProvider/>', () => {
           storefrontToken: 'newtoken',
         })
       ).toEqual({
-        'X-SDK-Variant': 'hydrogen-ui',
+        'X-SDK-Variant': 'storefront-kit',
         'X-SDK-Variant-Source': 'react',
         'X-SDK-Version': '2022-10',
         'X-Shopify-Storefront-Access-Token': 'newtoken',
