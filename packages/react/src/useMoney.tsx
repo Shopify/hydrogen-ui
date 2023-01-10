@@ -51,12 +51,17 @@ export type UseMoneyValue = {
 };
 
 /**
- * The `useMoney` hook takes a [MoneyV2 object](https://shopify.dev/api/storefront/reference/common-objects/moneyv2) and returns a
+ * The `useMoney` hook takes the `amount` and `currencyCode` from a [MoneyV2 object](https://shopify.dev/api/storefront/reference/common-objects/moneyv2) and returns a
  * default-formatted string of the amount with the correct currency indicator, along with some of the parts provided by
  * [Intl.NumberFormat](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat).
  * Uses `locale` from `ShopifyProvider`
  */
-export function useMoney(money: MoneyV2): UseMoneyValue {
+export function useMoney(
+  /** The `amount` that corresponds to the Storefront API's [MoneyV2 object](https://shopify.dev/api/storefront/reference/common-objects/moneyv2). */
+  amount: MoneyV2['amount'],
+  /** The `currencyCode` that corresponds to the Storefront API's [MoneyV2 object](https://shopify.dev/api/storefront/reference/common-objects/moneyv2). */
+  currencyCode: MoneyV2['currencyCode']
+): UseMoneyValue {
   const {locale} = useShop();
 
   if (!locale) {
@@ -65,14 +70,14 @@ export function useMoney(money: MoneyV2): UseMoneyValue {
     );
   }
 
-  const amount = parseFloat(money.amount);
+  const parsedAmount = parseFloat(amount);
 
   const options = useMemo(
     () => ({
       style: 'currency',
-      currency: money.currencyCode,
+      currency: currencyCode,
     }),
-    [money.currencyCode]
+    [currencyCode]
   );
 
   const defaultFormatter = useLazyFormatter(locale, options);
@@ -107,38 +112,38 @@ export function useMoney(money: MoneyV2): UseMoneyValue {
   // create formatters if they are going to be used.
   const lazyFormatters = useMemo(
     () => ({
-      original: () => money,
-      currencyCode: () => money.currencyCode,
+      original: () => ({amount, currencyCode}),
+      currencyCode: () => currencyCode,
 
-      localizedString: () => defaultFormatter().format(amount),
+      localizedString: () => defaultFormatter().format(parsedAmount),
 
-      parts: () => defaultFormatter().formatToParts(amount),
+      parts: () => defaultFormatter().formatToParts(parsedAmount),
 
       withoutTrailingZeros: () =>
-        amount % 1 === 0
-          ? withoutTrailingZerosFormatter().format(amount)
-          : defaultFormatter().format(amount),
+        parsedAmount % 1 === 0
+          ? withoutTrailingZerosFormatter().format(parsedAmount)
+          : defaultFormatter().format(parsedAmount),
 
       withoutTrailingZerosAndCurrency: () =>
-        amount % 1 === 0
-          ? withoutTrailingZerosOrCurrencyFormatter().format(amount)
-          : withoutCurrencyFormatter().format(amount),
+        parsedAmount % 1 === 0
+          ? withoutTrailingZerosOrCurrencyFormatter().format(parsedAmount)
+          : withoutCurrencyFormatter().format(parsedAmount),
 
       currencyName: () =>
-        nameFormatter().formatToParts(amount).find(isPartCurrency)?.value ??
-        money.currencyCode, // e.g. "US dollars"
+        nameFormatter().formatToParts(parsedAmount).find(isPartCurrency)
+          ?.value ?? currencyCode, // e.g. "US dollars"
 
       currencySymbol: () =>
-        defaultFormatter().formatToParts(amount).find(isPartCurrency)?.value ??
-        money.currencyCode, // e.g. "USD"
+        defaultFormatter().formatToParts(parsedAmount).find(isPartCurrency)
+          ?.value ?? currencyCode, // e.g. "USD"
 
       currencyNarrowSymbol: () =>
-        narrowSymbolFormatter().formatToParts(amount).find(isPartCurrency)
+        narrowSymbolFormatter().formatToParts(parsedAmount).find(isPartCurrency)
           ?.value ?? '', // e.g. "$"
 
       amount: () =>
         defaultFormatter()
-          .formatToParts(amount)
+          .formatToParts(parsedAmount)
           .filter((part) =>
             ['decimal', 'fraction', 'group', 'integer', 'literal'].includes(
               part.type
@@ -148,8 +153,9 @@ export function useMoney(money: MoneyV2): UseMoneyValue {
           .join(''),
     }),
     [
-      money,
       amount,
+      currencyCode,
+      parsedAmount,
       nameFormatter,
       defaultFormatter,
       narrowSymbolFormatter,

@@ -27,9 +27,15 @@ export function CartLinePrice(
       ? cartLine.cost?.totalAmount
       : cartLine.cost?.compareAtAmountPerQuantity;
 
-  if (moneyV2 == null) {
+  if (!moneyV2 || !moneyV2.amount || !moneyV2.currencyCode) {
     return null;
   }
 
-  return <Money {...passthroughProps} data={moneyV2} />;
+  return (
+    <Money
+      {...passthroughProps}
+      amount={moneyV2.amount}
+      currencyCode={moneyV2.currencyCode}
+    />
+  );
 }

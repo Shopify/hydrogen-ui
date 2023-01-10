@@ -30,12 +30,16 @@ export function CartCost(
     amount = cost?.totalDutyAmount;
   }
 
-  if (amount == null) {
+  if (!amount || !amount.amount || !amount.currencyCode) {
     return null;
   }
 
   return (
-    <Money {...passthroughProps} data={amount}>
+    <Money
+      {...passthroughProps}
+      amount={amount.amount}
+      currencyCode={amount.currencyCode}
+    >
       {children}
     </Money>
   );

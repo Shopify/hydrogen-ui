@@ -7,7 +7,7 @@ import {getPrice, getUnitPriceMeasurement} from './Money.test.helpers.js';
 describe('<Money />', () => {
   it('renders a formatted money string', () => {
     const money = getPrice({currencyCode: 'USD'});
-    render(<Money data={money} />, {
+    render(<Money {...money} />, {
       wrapper: ({children}) => (
         <ShopifyProvider shopifyConfig={getShopifyConfig()}>
           {children}
@@ -22,7 +22,7 @@ describe('<Money />', () => {
     const money = getPrice({
       currencyCode: 'EUR',
     });
-    render(<Money data={money} />, {
+    render(<Money {...money} />, {
       wrapper: ({children}) => (
         <ShopifyProvider shopifyConfig={getShopifyConfig()}>
           {children}
@@ -35,7 +35,7 @@ describe('<Money />', () => {
 
   it('allows pass-through props to the wrapping component', () => {
     const money = getPrice();
-    render(<Money data={money} className="money" />, {
+    render(<Money {...money} className="money" />, {
       wrapper: ({children}) => (
         <ShopifyProvider shopifyConfig={getShopifyConfig()}>
           {children}
@@ -49,7 +49,7 @@ describe('<Money />', () => {
   it(`validates props when a different Element  is passed to the 'as' prop`, () => {
     const money = getPrice();
 
-    render(<Money data={money} as="button" disabled />, {
+    render(<Money {...money} as="button" disabled />, {
       wrapper: ({children}) => (
         <ShopifyProvider shopifyConfig={getShopifyConfig()}>
           {children}
@@ -69,7 +69,7 @@ describe('<Money />', () => {
       currencyCode: 'EUR',
       amount: '19.00',
     });
-    render(<Money data={money} withoutTrailingZeros />, {
+    render(<Money {...money} withoutTrailingZeros />, {
       wrapper: ({children}) => (
         <ShopifyProvider shopifyConfig={getShopifyConfig()}>
           {children}
@@ -85,7 +85,7 @@ describe('<Money />', () => {
     const money = getPrice({
       currencyCode: 'EUR',
     });
-    render(<Money data={money} withoutCurrency />, {
+    render(<Money {...money} withoutCurrency />, {
       wrapper: ({children}) => (
         <ShopifyProvider shopifyConfig={getShopifyConfig()}>
           {children}
@@ -102,7 +102,7 @@ describe('<Money />', () => {
       currencyCode: 'EUR',
       amount: '19.00',
     });
-    render(<Money data={money} withoutCurrency withoutTrailingZeros />, {
+    render(<Money {...money} withoutCurrency withoutTrailingZeros />, {
       wrapper: ({children}) => (
         <ShopifyProvider shopifyConfig={getShopifyConfig()}>
           {children}
@@ -122,7 +122,7 @@ describe('<Money />', () => {
     });
 
     const measurement = getUnitPriceMeasurement();
-    render(<Money data={money} measurement={measurement} />, {
+    render(<Money {...money} measurement={measurement} />, {
       wrapper: ({children}) => (
         <ShopifyProvider shopifyConfig={getShopifyConfig()}>
           {children}
@@ -146,7 +146,7 @@ describe('<Money />', () => {
 
     const {container} = render(
       <Money
-        data={money}
+        {...money}
         measurement={measurement}
         measurementSeparator={<MeasurementSeparator />}
       />,
@@ -176,7 +176,7 @@ describe('<Money />', () => {
 
     render(
       <Money
-        data={money}
+        {...money}
         measurement={measurement}
         measurementSeparator={MeasurementSeparator}
       />,

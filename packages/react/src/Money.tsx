@@ -6,8 +6,10 @@ import type {PartialDeep} from 'type-fest';
 interface CustomProps<ComponentGeneric extends React.ElementType> {
   /** An HTML tag or React Component to be rendered as the base element wrapper. The default is `div`. */
   as?: ComponentGeneric;
-  /** An object with fields that correspond to the Storefront API's [MoneyV2 object](https://shopify.dev/api/storefront/reference/common-objects/moneyv2). */
-  data: PartialDeep<MoneyV2, {recurseIntoArrays: true}>;
+  /** The `amount` that corresponds to the Storefront API's [MoneyV2 object](https://shopify.dev/api/storefront/reference/common-objects/moneyv2). */
+  amount: MoneyV2['amount'];
+  /** The `currencyCode` that corresponds to the Storefront API's [MoneyV2 object](https://shopify.dev/api/storefront/reference/common-objects/moneyv2). */
+  currencyCode: MoneyV2['currencyCode'];
   /** Whether to remove the currency symbol from the output. */
   withoutCurrency?: boolean;
   /** Whether to remove trailing zeros (fractional money) from the output. */
@@ -32,7 +34,8 @@ export type MoneyProps<ComponentGeneric extends React.ElementType> =
  * `locale` in the `ShopifyProvider` component.
  */
 export function Money<ComponentGeneric extends React.ElementType = 'div'>({
-  data,
+  amount,
+  currencyCode,
   as,
   withoutCurrency,
   withoutTrailingZeros,
@@ -40,12 +43,10 @@ export function Money<ComponentGeneric extends React.ElementType = 'div'>({
   measurementSeparator = '/',
   ...passthroughProps
 }: MoneyProps<ComponentGeneric>) {
-  if (!isMoney(data)) {
-    throw new Error(
-      `<Money/> needs a valid 'data' prop that has 'amount' and 'currencyCode'`
-    );
+  if (!amount || !currencyCode) {
+    throw new Error(`<Money/> requires the 'amount' and 'currencyCode' props`);
   }
-  const moneyObject = useMoney(data);
+  const moneyObject = useMoney(amount, currencyCode);
   const Wrapper = as ?? 'div';
 
   let output = moneyObject.localizedString;
@@ -71,17 +72,5 @@ export function Money<ComponentGeneric extends React.ElementType = 'div'>({
         </>
       )}
     </Wrapper>
-  );
-}
-
-// required in order to narrow the money object down and make TS happy
-function isMoney(
-  maybeMoney: PartialDeep<MoneyV2, {recurseIntoArrays: true}>
-): maybeMoney is MoneyV2 {
-  return (
-    typeof maybeMoney.amount === 'string' &&
-    !!maybeMoney.amount &&
-    typeof maybeMoney.currencyCode === 'string' &&
-    !!maybeMoney.currencyCode
   );
 }

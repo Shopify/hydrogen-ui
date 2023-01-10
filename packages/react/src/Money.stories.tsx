@@ -6,18 +6,16 @@ import type {UnitPriceMeasurementMeasuredUnit} from './storefront-api-types.js';
 type MoneyProps = React.ComponentPropsWithRef<typeof Money>;
 
 const Template: Story<{
-  'data.amount': MoneyProps['data']['amount'];
-  'data.currencyCode': MoneyProps['data']['currencyCode'];
+  amount: MoneyProps['amount'];
+  currencyCode: MoneyProps['currencyCode'];
   withoutCurrency: MoneyProps['withoutCurrency'];
   withoutTrailingZeros: MoneyProps['withoutTrailingZeros'];
   measurementSeparator: MoneyProps['measurementSeparator'];
   'measurement.referenceUnit': UnitPriceMeasurementMeasuredUnit;
 }> = (props) => {
   const finalProps: MoneyProps = {
-    data: {
-      amount: props['data.amount'] ?? '100',
-      currencyCode: props['data.currencyCode'] ?? 'USD',
-    },
+    amount: props.amount ?? '100',
+    currencyCode: props.currencyCode ?? 'USD',
     withoutCurrency: props.withoutCurrency,
     withoutTrailingZeros: props.withoutTrailingZeros,
     measurementSeparator: props.measurementSeparator,
@@ -34,8 +32,8 @@ const Template: Story<{
 
 export const Default = Template.bind({});
 Default.args = {
-  'data.amount': '100',
-  'data.currencyCode': 'USD',
+  amount: '100',
+  currencyCode: 'USD',
   withoutCurrency: false,
   withoutTrailingZeros: false,
   measurementSeparator: '/',

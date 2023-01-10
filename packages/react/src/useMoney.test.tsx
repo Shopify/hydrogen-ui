@@ -3,12 +3,7 @@ import {useMoney} from './useMoney.js';
 
 describe(`useMoney`, () => {
   it('returns an object with all of the details about the money', () => {
-    const {result} = renderHook(() =>
-      useMoney({
-        amount: '19.99',
-        currencyCode: 'USD',
-      })
-    );
+    const {result} = renderHook(() => useMoney('19.99', 'USD'));
 
     expect(result.current).toEqual({
       amount: '19.99',
@@ -33,12 +28,7 @@ describe(`useMoney`, () => {
   });
 
   it(`removes trailing zeros when necessary`, () => {
-    const {result} = renderHook(() =>
-      useMoney({
-        amount: '19.00',
-        currencyCode: 'USD',
-      })
-    );
+    const {result} = renderHook(() => useMoney('19.00', 'USD'));
 
     expect(result.current).toEqual({
       amount: '19.00',

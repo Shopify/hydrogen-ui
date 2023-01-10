@@ -24,7 +24,10 @@ export interface ProductPriceProps {
  */
 export function ProductPrice<ComponentGeneric extends React.ElementType>(
   props: ProductPriceProps &
-    Omit<MoneyProps<ComponentGeneric>, 'data' | 'measurement'>
+    Omit<
+      MoneyProps<ComponentGeneric>,
+      'amount' | 'currencyCode' | 'measurement'
+    >
 ) {
   const {
     priceType = 'regular',
@@ -72,15 +75,26 @@ export function ProductPrice<ComponentGeneric extends React.ElementType>(
     }
   }
 
-  if (!price) {
+  if (!price || !price.amount || !price.currencyCode) {
     return null;
   }
 
   if (measurement) {
     return (
-      <Money {...passthroughProps} data={price} measurement={measurement} />
+      <Money
+        {...passthroughProps}
+        amount={price.amount}
+        currencyCode={price.currencyCode}
+        measurement={measurement}
+      />
     );
   }
 
-  return <Money {...passthroughProps} data={price} />;
+  return (
+    <Money
+      {...passthroughProps}
+      amount={price.amount}
+      currencyCode={price.currencyCode}
+    />
+  );
 }

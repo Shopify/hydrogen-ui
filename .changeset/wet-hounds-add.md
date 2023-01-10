@@ -35,3 +35,12 @@ The Storefront API changelog can be viewed [here](https://shopify.dev/api/releas
     ```
 
 - The `<Metafield/>` component has been removed; use `parseMetafield().parsedValue` to have control over what you want to render
+
+### Removal of `data` prop from components
+
+In [issue 106](https://github.com/Shopify/hydrogen-ui/issues/106), we solicited feedback about the usage of the `data` prop for components. Overwhelmingly the feedback was to remove the `data` prop and use individual props with primitive values instead of a `data` prop with an object.
+
+Due to this change, the following components have had their props changed:
+
+- `<Money data={moneyV2}/>` is now `<Money amount={moneyV2.amount} currencyCode={moneyV2.currencyCode}/>`
+- `useMoney(moneyV2)` is now `useMoney(moneyV2.amount, moneyV2.currency)`
